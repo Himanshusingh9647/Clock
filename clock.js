@@ -16,20 +16,12 @@ fullscreenBtn.addEventListener('click', toggleFullscreen);
 
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-        fullscreenBtn.remove(); // Remove the fullscreen button after entering fullscreen
+        document.documentElement.requestFullscreen()
+            .then(() => {
+                fullscreenBtn.remove(); // Remove the fullscreen button after entering fullscreen
+            })
+            .catch(err => {
+                console.log(`Error attempting to enable fullscreen mode: ${err.message}`);
+            });
     }
 }
-
-// Optional: Exit fullscreen and show the button again (if needed)
-// You can listen for the exit from fullscreen event to bring the button back
-document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement) {
-        const clockContainer = document.querySelector('.clock-container');
-        const newButton = document.createElement('button');
-        newButton.id = 'fullscreen-btn';
-        newButton.textContent = 'Go Fullscreen';
-        newButton.addEventListener('click', toggleFullscreen);
-        clockContainer.appendChild(newButton);
-    }
-});
